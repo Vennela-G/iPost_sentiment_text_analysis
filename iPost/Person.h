@@ -17,14 +17,10 @@ private:
 	string username;
 	string password;
 
-	SensitivityPrefEnum sensitivity_pref;
-	AccountStatusEnum account_status;
-
 public:
 	
 	Person();
-	Person(string arg_f_name, string arg_l_name, string arg_email, string arg_username, string arg_password, 
-		   SensitivityPrefEnum arg_sensitivity_pref, AccountStatusEnum arg_account_status);
+	Person(string arg_f_name, string arg_l_name, string arg_email, string arg_username, string arg_password);
 
 	void set_first_name(string arg_f_name);
 	string get_first_name();
@@ -40,12 +36,6 @@ public:
 
 	void set_password(string arg_password);
 	string get_password();
-
-	void set_sensitivity_pref(SensitivityPrefEnum arg_sensitivity_pref);
-	SensitivityPrefEnum get_sensitivity_pref();
-
-	void set_account_status(AccountStatusEnum arg_account_status);
-	AccountStatusEnum get_account_status();
 
 	//virtual void view_posts(const vector<Post>&) = 0;
 

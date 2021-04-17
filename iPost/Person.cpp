@@ -12,21 +12,14 @@ Person::Person() {
 	email_address = "";
 	username = "";
 	password = "";
-
-	sensitivity_pref = SensitivityPrefEnum::MILD;
-	account_status = AccountStatusEnum::ACTIVE;
 }
 
-Person::Person(string arg_f_name, string arg_l_name, string arg_email, string arg_username, string arg_password,
-			   SensitivityPrefEnum arg_sensitivity_pref, AccountStatusEnum arg_account_status) {
+Person::Person(string arg_f_name, string arg_l_name, string arg_email, string arg_username, string arg_password) {
 	first_name = arg_f_name;
 	last_name = arg_l_name;
 	email_address = arg_email;
 	username = arg_username;
 	password = arg_password;
-
-	sensitivity_pref = arg_sensitivity_pref;
-	account_status = arg_account_status;
 }
 
 void Person::set_first_name(string arg_f_name) {
@@ -67,20 +60,4 @@ void Person::set_password(string arg_password) {
 
 string Person::get_password() {
 	return password;
-}
-
-void Person::set_sensitivity_pref(SensitivityPrefEnum arg_sensitivity_pref) {
-	sensitivity_pref = arg_sensitivity_pref;
-}
-
-SensitivityPrefEnum Person::get_sensitivity_pref() {
-	return sensitivity_pref;
-}
-
-void Person::set_account_status(AccountStatusEnum arg_account_status) {
-	account_status = arg_account_status;
-}
-
-AccountStatusEnum Person::get_account_status() {
-	return account_status;
 }

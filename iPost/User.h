@@ -10,15 +10,23 @@ class User : public Person {
 private:
     
     int age;
+    SensitivityPrefEnum sensitivity_pref;
+    AccountStatusEnum account_status;
     time_t last_login_date_time;
 
 public: 
     
     User();
-    User(int arg_age, time_t arg_last_login_date_time);
+    User(int arg_age, SensitivityPrefEnum arg_sensitivity_pref, AccountStatusEnum arg_account_status, time_t arg_last_login_date_time);
 
     void set_age(int arg_age);    
     int get_age();
+
+    void set_sensitivity_pref(SensitivityPrefEnum arg_sensitivity_pref);
+    SensitivityPrefEnum get_sensitivity_pref();
+
+    void set_account_status(AccountStatusEnum arg_account_status);
+    AccountStatusEnum get_account_status();
 
     void set_last_login_date_time(time_t arg_last_login_date_time);
     time_t get_last_login_date_time();
