@@ -1,0 +1,5 @@
+﻿  main.cpp
+C:\Users\venne\source\repos\iPost\iPost\main.cpp(195,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\venne\source\repos\iPost\iPost\main.cpp(107): warning C4715: 'enum_sensitivity_pref_to_string': not all control paths return a value
+C:\Users\venne\source\repos\iPost\iPost\main.cpp(121): warning C4715: 'enum_acct_status_to_string': not all control paths return a value
+  iPost.vcxproj -> C:\Users\venne\source\repos\iPost\Debug\iPost.exe
