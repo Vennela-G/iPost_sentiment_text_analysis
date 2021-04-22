@@ -2,7 +2,7 @@
 
 #include "Person.h"
 #include "AppDefinitions.h"
-#include "Post.H"
+#include "Post.h"
 
 using namespace std;
 
