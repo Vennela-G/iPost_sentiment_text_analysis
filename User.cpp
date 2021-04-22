@@ -1,5 +1,8 @@
 #include <iostream>
+#include <sstream>
 #include <string.h>
+#include <limits>
+#include <map>
 
 #include "User.h"
 #include "Person.h"
@@ -63,30 +66,7 @@ char* User::get_last_login_date_time() {
     return last_login_date_time;
 }
 
-int User::printing_choice_options(string question, string option_1, string option_2) {
-
-	int response = 0;
-
-	do {
-		cout << endl << question << endl;
-		cout << "[1] " << option_1 << endl;
-		cout << "[2] " << option_2 << endl << endl;
-
-		cout << "Option: ";
-		cin >> response;
-
-		if (response == 1 || response == 2) {
-			return response;
-		}
-		else {
-			cout << "ERROR: You have entered an invalid option! Please try again." << endl << endl;
-		}
-
-	} while (true);
-
-}
-
-void User::user_login(vector<User> user_data, User& user) {
+int User::login(vector<User> user_data) {
 
 	cout << endl << "Login" << endl;
 
@@ -95,21 +75,20 @@ void User::user_login(vector<User> user_data, User& user) {
 	string username = "";
 	cout << "Username: ";
 	cin >> username;
+	this->set_username(username);
 
 	string password = "";
 	cout << "Password: ";
 	cin >> password;
+	this->set_password(password);
 
 	vector<User>::iterator iter;
 	for (iter = user_data.begin(); iter != user_data.end(); iter++) {
 
-		if ((*iter).get_username() == username && (*iter).get_password() == password) {
-			
-			User user_temp((*iter).get_first_name(), (*iter).get_last_name(), (*iter).get_email_address(), (*iter).get_username(),
-				           (*iter).get_password(), (*iter).get_age(), (*iter).get_sensitivity_pref(), (*iter).get_account_status(), (*iter).get_last_login_date_time());
-				
-				user = user_temp;
-				break;
+		if (this->get_username().compare((*iter).get_username()) == 0 && this->get_password().compare((*iter).get_password()) == 0) {
+			this->set_first_name((*iter).get_first_name());
+			this->set_account_status((*iter).get_account_status());
+			return 1;
 		}
 
 	}
@@ -120,7 +99,11 @@ void User::user_login(vector<User> user_data, User& user) {
 		choice = printing_choice_options("What would you like to do?", "Try logging in again", "Exit");
 
 		if (choice == 1) {
-			user_login(user_data, user);
+			login(user_data);
+		}
+
+		if (choice == 2) {
+			return 0;
 		}
 
 	}
@@ -225,21 +208,98 @@ void User::view_all_posts(vector<Post>& posts) {
 		}
 
 		cout << endl;
+
 	}
 
 }
 
-void User::view_user_posts(vector<Post>& posts, User user) {
-	
-	string username = user.get_username();
+void User::view_user_posts(vector<Post>& posts) {
 	
 	vector<Post>::iterator iter;
 	for (iter = posts.begin(); iter != posts.end(); iter++) {
 
-		if (username == iter->get_username()) {
+		if (get_username() == iter->get_username()) {
 			cout << *iter;
 		}
 
 		cout << endl;
+
 	}
+
+}
+
+void User::make_post(vector<Post>& posts) {
+
+	Post new_post;
+
+	string message;
+	cout << "Enter your message: ";
+	cin.ignore();
+	getline(cin, message);
+
+	time_t current_time = time(0);
+
+	char post_time[26];
+	ctime_s(post_time, sizeof post_time, &current_time);
+
+	new_post.set_post_id(FileIO::random_string());
+	new_post.set_username(get_username());
+	new_post.set_message(message);
+	new_post.set_post_date_time(post_time);
+	new_post.set_sensitivity_pref(SensitivityPrefEnum::MILD); // TODO Through REST call to Azure API
+
+	posts.push_back(new_post);
+	FileIO::save_post_data(posts);
+
+}
+
+void User::delete_post(vector<Post>& posts) {
+	
+	int num_user_posts = 0;
+
+	vector<Post>::iterator iter;
+	for (iter = posts.begin(); iter != posts.end() - 1; iter++) {
+
+		if (get_username() == iter->get_username()) {
+			num_user_posts++;
+		}
+
+	}
+	
+	cout << endl << "Here are your posts:" << endl << endl;
+	view_user_posts(posts);
+
+	string post_id = "";
+
+	cout << endl << "Enter the ID of the post you would like to delete: ";
+	cin >> post_id;
+
+	bool post_found = false;
+
+	int i = 0;
+	for (iter = posts.begin(); iter != posts.end(); iter++) {
+
+		if (post_id.compare(iter->get_post_id()) == 0 && get_username() == iter->get_username()) {
+			post_found = true;
+			break;
+		}
+
+		i++;
+
+	}
+
+	if (post_found) {
+		posts.erase(posts.begin() + i);
+		cout << "Deletion Successful!" << endl;
+		FileIO::save_post_data(posts);
+	}
+	else {
+		cout << "ERROR: The post ID you have entered is invalid" << endl;
+	}
+
+}
+
+ostream& operator<<(ostream& os, User& user) {
+	os << "[@" << user.get_username() << "] " << user.get_first_name() << " " << user.get_last_name() << endl;
+	return os;
 }

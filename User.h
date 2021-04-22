@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "Person.h"
-#include "User.h"
 #include "Post.h"
 
 class User : public Person {
@@ -35,16 +34,15 @@ public:
     void set_last_login_date_time(char* arg_last_login_date_time);
     char* get_last_login_date_time();
 
-    static int printing_choice_options(string question, string option_1, string option_2);
-    
-    static void user_login(vector<User> user_data, User& user);
+    int login(vector<User> user_data);
     static void user_registration(vector<User>& user_data, User& user);
 
     void view_all_posts(vector<Post>& posts);
-    void view_user_posts(vector<Post>& posts, User user);
+    void view_user_posts(vector<Post>& posts);
+    void make_post(vector<Post>& posts);
+    void delete_post(vector<Post>& posts);
 
-    //friend void take_action(User&, Admin&, AccountStatusEnum);
-    //friend void delete_post(User&, Post&, Admin&);
+    friend ostream& operator<<(ostream& os, User& user);
 
 };
 

@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "AppDefinitions.h"
-//#include "Admin.h"
 
 using namespace std;
 
@@ -40,7 +39,6 @@ public:
 	void set_sensitivity_pref(SensitivityPrefEnum arg_sensitivity_pref);
 	SensitivityPrefEnum get_sensitivity_pref();
 
-	//friend void delete_post(User&, Post&, Admin&);
 	friend ostream& operator<<(ostream& os, Post& p);
 
 };

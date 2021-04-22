@@ -10,122 +10,130 @@
 #include "AppDefinitions.h"
 #include "FileIO.h"
 #include "EnumHelper.h"
-#include "PostHelper.h"
 #include "Person.h"
 #include "User.h"
+#include "Admin.h"
 
 using namespace std;
-
-int printing_choice_options(string question, string option_1, string option_2);
-int printing_choice_options(string question, string option_1, string option_2, string option_3, string option_4);
 
 int main() {
 
 	cout << "iPost" << endl;
 
-	vector <User> user_data;
+	vector <User> user_info;
 	vector <Post> posts;
 	
-	FileIO::load_user_data(user_data);
+	FileIO::load_user_data(user_info);
 
-	User current_user;
 	int acct_type = 0;
 	int entry_funct = 0;
 	int acct_funct = 0;
 	int view_post_funct = 0;
+	int acct_management_funct = 0;
 
-	acct_type = printing_choice_options("What type of user are you?", "User", "Admin");
+	acct_type = Person::printing_choice_options("What type of user are you?", "User", "Admin");
 
 	if (acct_type == 1) {
-		entry_funct = printing_choice_options("What would you like to do?", "Login", "Register");
+		
+		User current_user;
+
+		entry_funct = Person::printing_choice_options("What would you like to do?", "Login", "Register");
 
 		if (entry_funct == 1) {
-			User::user_login(user_data, current_user);
+			int login_successful = current_user.login(user_info);
 
-			if (current_user.get_username() == "") {
+			if (login_successful == 0) {
 				return 0;
 			}
 
 		}
 
 		if (entry_funct == 2) {
-			User::user_registration(user_data, current_user);		
+			User::user_registration(user_info, current_user);
 		}
 
 		cout << endl << "Welcome " << current_user.get_first_name() << "!" << endl;
+
+		if (current_user.get_account_status() == AccountStatusEnum::DISABLED) {
+			cout << "Your iPost account has disabled!" << endl;
+			return -1;
+		}
+
 		FileIO::load_post_data(posts);
 
-		acct_funct = printing_choice_options("What would you like to do?", "View Posts", "Make Post", "Delete Post", "Logout");
+		do {
+			
+			acct_funct = Person::printing_choice_options("What would you like to do?", "View Posts", "Make Post", "Delete Post", "Logout");
 
-		if (acct_funct == 1) {
-			view_post_funct = printing_choice_options("What posts would you like to view", "My Posts", "All Posts");
+			if (acct_funct == 1) {
+				view_post_funct = Person::printing_choice_options("What posts would you like to view", "My Posts", "All Posts");
 
-			if (view_post_funct == 1) {
-				User::view_all_posts(posts);
+				if (view_post_funct == 1) {
+					current_user.view_user_posts(posts);
+				}
+
+				if (view_post_funct == 2) {
+					current_user.view_all_posts(posts);
+				}
+
 			}
 
-			if (view_post_funct == 2) {
-				User::view_user_posts(posts);
+			if (acct_funct == 2) {
+				current_user.make_post(posts);
 			}
 
+			if (acct_funct == 3) {
+				current_user.delete_post(posts);
+			}
+
+		} while (acct_funct != 4);
+
+	}
+
+	if (acct_type == 2) {
+		Admin admin;
+
+		int login_successful = admin.login();
+
+		if (login_successful == 0) {
+			return 0;
 		}
+
+		cout << endl << "Welcome " << admin.get_first_name() << "!" << endl;
+		FileIO::load_post_data(posts);
+
+		do {
+
+			acct_funct = Person::printing_choice_options("What would you like to do?", "View All Posts", "Delete Post", "Account Management", "Logout");
+
+			if (acct_funct == 1) {
+				admin.view_all_posts(posts);
+			}
+
+			if (acct_funct == 2) {
+				admin.delete_post(posts);
+			}
+
+			if (acct_funct == 3) {
+				acct_management_funct = Person::printing_choice_options("What would you like to view", "Disable Account", "Enable Account");
+				
+				if (acct_management_funct == 1) {
+					admin.disable_account(user_info);
+				}
+
+				if (acct_management_funct == 2) {
+					admin.enable_account(user_info);
+				}
+				
+			}
+
+		} while (acct_funct != 4);
 
 	}
 
 	return 0;
 }
 
-int printing_choice_options(string question, string option_1, string option_2) {
-
-	int response = 0;
-
-	do {
-		cout << endl << question << endl;
-		cout << "[1] " << option_1 << endl;
-		cout << "[2] " << option_2 << endl << endl;
-
-		cout << "Option: ";
-		cin >> response;
-
-		if (response == 1 || response == 2) {
-			return response;
-		}
-		else {
-			cout << "ERROR: You have entered an invalid option! Please try again." << endl << endl;
-		}
-
-	} while (true);
-
-	return response;
-
-}
-
-int printing_choice_options(string question, string option_1, string option_2, string option_3, string option_4) {
-
-	int response = 0;
-
-	do {
-		cout << endl << question << endl;
-		cout << "[1] " << option_1 << endl;
-		cout << "[2] " << option_2 << endl;
-		cout << "[3] " << option_3 << endl;
-		cout << "[4] " << option_4 << endl << endl;
-
-		cout << "Option: ";
-		cin >> response;
-
-		if ((response == 1 || response == 2) || (response == 3 || response == 4)) {
-			return response;
-		}
-		else {
-			cout << "ERROR: You have entered an invalid option! Please try again." << endl << endl;
-		}
-
-	} while (true);
-
-	return response;
-
-}
 
 
 

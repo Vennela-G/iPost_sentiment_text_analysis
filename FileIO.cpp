@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 #include "FileIO.h"
 #include "AppDefinitions.h"
@@ -132,3 +133,21 @@ void FileIO::save_post_data(vector<Post>& posts) {
 
 
 }
+
+string FileIO::random_string() {
+				
+	string temp_string;
+	static const char alpha_num_arr[] =
+		"0123456789"
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz";
+
+	for (unsigned int i = 0; i < 6; ++i) {
+		srand(time(0));
+		temp_string += alpha_num_arr[(rand() % 6) + 1];
+	}
+	
+	return temp_string;
+
+}
+

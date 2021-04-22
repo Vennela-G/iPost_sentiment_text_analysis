@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "AppDefinitions.h"
-#include "User.h"
 #include "Post.h"
 
 using namespace std;
@@ -40,7 +39,9 @@ public:
 	string get_password();
 
 	virtual void view_all_posts(vector<Post>& posts) = 0;
-	virtual void view_user_posts(vector<Post>& posts, User user) = 0;
+
+	static int printing_choice_options(string question, string option_1, string option_2);
+	static int printing_choice_options(string question, string option_1, string option_2, string option_3, string option_4);
 
 };
 

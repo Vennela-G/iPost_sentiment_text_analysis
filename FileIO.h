@@ -18,6 +18,8 @@ public:
 	static void load_post_data(vector<Post>& posts);
 	static void save_post_data(vector<Post>& posts);
 
+	static string random_string();
+
 };
 
 #endif

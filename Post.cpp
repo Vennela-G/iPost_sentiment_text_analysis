@@ -65,6 +65,6 @@ SensitivityPrefEnum Post::get_sensitivity_pref() {
 }
 
 ostream& operator<<(ostream& os, Post& post) {
-	os << "@" << post.get_username() << " " << post.get_post_date_time() << endl << post.get_message() << endl;
+	os << "[ID: " << post.get_post_id() << "]  @" << post.get_username() << " " << post.get_post_date_time() << endl << post.get_message() << endl;
 	return os;
 }
