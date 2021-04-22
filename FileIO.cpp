@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <ctime>
 
 #include "FileIO.h"
 #include "AppDefinitions.h"
@@ -26,8 +27,9 @@ void FileIO::load_user_data(vector<User>& users) {
 
 	time_t current_time = time(0);
 	
-	char last_login[26];
-	ctime_s(last_login, sizeof last_login, &current_time);
+	char last_login[80];
+	// ctime_s(last_login, sizeof last_login, &current_time);
+  	strftime (last_login, 50, "%B %d, %Y %T", localtime(&current_time));
 
 	ifstream user_data_file;
 	user_data_file.open("user_info.txt");

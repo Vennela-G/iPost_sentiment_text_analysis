@@ -3,6 +3,7 @@
 #include <string.h>
 #include <limits>
 #include <map>
+#include <ctime>
 
 #include "User.h"
 #include "Person.h"
@@ -108,6 +109,8 @@ int User::login(vector<User> user_data) {
 
 	}
 
+	return 0;
+
 }
 
 void User::user_registration(vector<User>& user_data, User& user) {
@@ -169,8 +172,10 @@ void User::user_registration(vector<User>& user_data, User& user) {
 
 	time_t current_time = time(0);
 
-	char last_login[26];
-	ctime_s(last_login, sizeof last_login, &current_time);
+	char last_login[80];
+	// ctime_s(last_login, sizeof last_login, &current_time);
+  	strftime (last_login, 50, "%B %d, %Y %T", localtime(&current_time));
+	
 	
 	User temp_user(f_name, l_name, email, username,
 		password, stoi(age.c_str()),
@@ -239,8 +244,9 @@ void User::make_post(vector<Post>& posts) {
 
 	time_t current_time = time(0);
 
-	char post_time[26];
-	ctime_s(post_time, sizeof post_time, &current_time);
+	char post_time[80];
+	// ctime_s(post_time, sizeof post_time, &current_time);
+  	strftime (post_time, 50, "%B %d, %Y %T", localtime(&current_time));
 
 	new_post.set_post_id(FileIO::random_string());
 	new_post.set_username(get_username());
