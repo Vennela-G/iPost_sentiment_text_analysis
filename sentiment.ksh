@@ -20,4 +20,4 @@ OUTPUT=`curl  -s -X POST "https://${AZURE_URL}/text/analytics/v2.1/sentiment?sho
 -H "Ocp-Apim-Subscription-Key: ${SUBSCRIPTION_KEY}" \
 --data "${DATA_TEXT}"`
 
-echo $OUTPUT | jq ".documents[0] .score"
+echo $OUTPUT

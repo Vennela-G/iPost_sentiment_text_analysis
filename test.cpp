@@ -34,14 +34,29 @@ string GetStdoutFromCommand(string & cmd) {
 
 int main() {
 
-	string json =  "This is sin, a hateful day, sad";
+	string json =  "@34561";
 
 	cout << json << endl << endl;
 
 	string command = "./sentiment.ksh \"" + json + "\"";
 	string score = GetStdoutFromCommand(command);
+        string s_pref_str;
 
 	cout << "Response from azure API (score): " << score << endl;
+
+    
+    	string temp = score.substr(score.find("0") + 1);
+    
+    	for (char tmp : temp) {
+        	if ((tmp >= 48 && tmp <= 57) || tmp == '.') {
+            		s_pref_str += tmp;
+        	}
+    	}	
+
+    
+    	double s_pref_val = 1 - stod(s_pref_str.c_str());
+
+	cout << "s_pref_val: " << s_pref_val << endl;
 
 	return 0;
 

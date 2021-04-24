@@ -28,8 +28,7 @@ void FileIO::load_user_data(vector<User>& users) {
 	time_t current_time = time(0);
 	
 	char last_login[80];
-	// ctime_s(last_login, sizeof last_login, &current_time);
-  	strftime (last_login, 50, "%B %d, %Y %T", localtime(&current_time));
+	strftime (last_login, 50, "%B %d, %Y %T", localtime(&current_time));
 
 	ifstream user_data_file;
 	user_data_file.open("user_info.txt");
@@ -56,7 +55,7 @@ void FileIO::load_user_data(vector<User>& users) {
 			temp.set_account_status(EnumHelper::string_to_acct_status(acct_status));
 			temp.set_last_login_date_time(last_login);
 
-			users.push_back(temp);
+			temp += users;
 		}
 		user_data_file.close();
 	}
@@ -111,7 +110,7 @@ void FileIO::load_post_data(vector<Post>& posts) {
 			temp.set_post_date_time(post_date_time);
 			temp.set_sensitivity_pref(EnumHelper::string_to_enum_sensitivity_pref(s_pref));
 
-			posts.push_back(temp);
+			temp += posts;
 		}
 		posts_file.close();
 	}
@@ -133,23 +132,6 @@ void FileIO::save_post_data(vector<Post>& posts) {
 			<< EnumHelper::enum_sensitivity_pref_to_string(posts[i].get_sensitivity_pref()) << endl;
 	}
 
-
-}
-
-string FileIO::random_string() {
-				
-	string temp_string;
-	static const char alpha_num_arr[] =
-		"0123456789"
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		"abcdefghijklmnopqrstuvwxyz";
-
-	for (unsigned int i = 0; i < 6; ++i) {
-		srand(time(0));
-		temp_string += alpha_num_arr[(rand() % 6) + 1];
-	}
-	
-	return temp_string;
 
 }
 

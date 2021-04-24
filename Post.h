@@ -38,8 +38,11 @@ public:
 
 	void set_sensitivity_pref(SensitivityPrefEnum arg_sensitivity_pref);
 	SensitivityPrefEnum get_sensitivity_pref();
+ 
+  string gen_random_string();
 
 	friend ostream& operator<<(ostream& os, Post& p);
+  Post& operator += (vector<Post>& post_vec);
 
 };
 

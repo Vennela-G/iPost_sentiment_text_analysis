@@ -1,14 +1,16 @@
 #include <iostream>
 #include <sstream>
+#include <iterator>
 #include <string.h>
 #include <limits>
-#include <map>
 #include <ctime>
 
 #include "User.h"
+#include "UserInterface.h"
 #include "Person.h"
 #include "EnumHelper.h"
 #include "FileIO.h"
+#include "Request.h"
 
 using namespace std;
 
@@ -67,7 +69,7 @@ char* User::get_last_login_date_time() {
     return last_login_date_time;
 }
 
-int User::login(vector<User> user_data) {
+int User::login(vector<User>& user_data) {
 
 	cout << endl << "Login" << endl;
 
@@ -88,7 +90,9 @@ int User::login(vector<User> user_data) {
 
 		if (this->get_username().compare((*iter).get_username()) == 0 && this->get_password().compare((*iter).get_password()) == 0) {
 			this->set_first_name((*iter).get_first_name());
+      this->set_last_name((*iter).get_last_name());
 			this->set_account_status((*iter).get_account_status());
+      this->set_sensitivity_pref((*iter).get_sensitivity_pref());
 			return 1;
 		}
 
@@ -97,7 +101,7 @@ int User::login(vector<User> user_data) {
 	if (iter == user_data.end()) {
 
 		cout << "The username or password you have entered is incorrect." << endl << endl;
-		choice = printing_choice_options("What would you like to do?", "Try logging in again", "Exit");
+		choice = UserInterface::printing_choice_options("What would you like to do?", "Try logging in again", "Exit");
 
 		if (choice == 1) {
 			login(user_data);
@@ -113,7 +117,7 @@ int User::login(vector<User> user_data) {
 
 }
 
-void User::user_registration(vector<User>& user_data, User& user) {
+void user_registration(vector<User>& user_data, User& user) {
 
 	cout << endl << "Registration" << endl;
 
@@ -173,8 +177,7 @@ void User::user_registration(vector<User>& user_data, User& user) {
 	time_t current_time = time(0);
 
 	char last_login[80];
-	// ctime_s(last_login, sizeof last_login, &current_time);
-  	strftime (last_login, 50, "%B %d, %Y %T", localtime(&current_time));
+ 	strftime (last_login, 50, "%B %d, %Y %T", localtime(&current_time));
 	
 	
 	User temp_user(f_name, l_name, email, username,
@@ -198,19 +201,20 @@ void User::view_all_posts(vector<Post>& posts) {
 		if (sensitivity_pref == SensitivityPrefEnum::MILD) {
 			cout << *iter;
 		}
-
-		if (sensitivity_pref == SensitivityPrefEnum::MODERATE) {
+		else if (sensitivity_pref == SensitivityPrefEnum::MODERATE) {
 			if (iter->get_sensitivity_pref() == SensitivityPrefEnum::MILD ||
 				iter->get_sensitivity_pref() == SensitivityPrefEnum::MODERATE) {
 				cout << *iter;
 			}
 		}
-
-		if (sensitivity_pref == SensitivityPrefEnum::HIGH) {
+		else if (sensitivity_pref == SensitivityPrefEnum::HIGH) {
 			if (iter->get_sensitivity_pref() == SensitivityPrefEnum::MILD) {
 				cout << *iter;
 			}
 		}
+   else {
+     cout << *iter;
+   }
 
 		cout << endl;
 
@@ -245,14 +249,49 @@ void User::make_post(vector<Post>& posts) {
 	time_t current_time = time(0);
 
 	char post_time[80];
-	// ctime_s(post_time, sizeof post_time, &current_time);
   	strftime (post_time, 50, "%B %d, %Y %T", localtime(&current_time));
 
-	new_post.set_post_id(FileIO::random_string());
+	new_post.set_post_id(new_post.gen_random_string());
 	new_post.set_username(get_username());
 	new_post.set_message(message);
 	new_post.set_post_date_time(post_time);
-	new_post.set_sensitivity_pref(SensitivityPrefEnum::MILD); // TODO Through REST call to Azure API
+	
+	string s_pref_score = Request::make_request(message);
+	
+	string temp;
+        string s_pref_str;
+    
+    	temp = s_pref_score.substr(s_pref_score.find("0") + 1);
+    
+    	for (char tmp : temp) {
+        	if ((tmp >= 48 && tmp <= 57) || tmp == '.') {
+            		s_pref_str += tmp;
+        	}
+    	}	
+
+    
+    	double s_pref_val = 1 - stod(s_pref_str.c_str());
+	
+
+  cout << endl << "Negative Sentiment Score: MILD - [0, 0.33], MODERATE - [0.34, 0.66], HIGH - [0.67, 1]" << endl;
+  cout << "Your post has a negative sentiment score of " << s_pref_val << endl << endl;
+  
+  int choice = 0;
+
+	if (s_pref_val >= 0 && s_pref_val <= 0.33) {
+		new_post.set_sensitivity_pref(SensitivityPrefEnum::MILD);
+	}
+	else if (s_pref_val > 0.33 && s_pref_val <+ 0.66) {
+		new_post.set_sensitivity_pref(SensitivityPrefEnum::MODERATE);
+	}
+	else {
+		choice = UserInterface::printing_choice_options("Do you wish to post this message?", "Yes", "No");
+    if (choice == 2) {
+      cout << "iPost did not post your message!" << endl << endl;
+      return;
+    }
+    new_post.set_sensitivity_pref(SensitivityPrefEnum::HIGH);
+	} 
 
 	posts.push_back(new_post);
 	FileIO::save_post_data(posts);
@@ -308,4 +347,9 @@ void User::delete_post(vector<Post>& posts) {
 ostream& operator<<(ostream& os, User& user) {
 	os << "[@" << user.get_username() << "] " << user.get_first_name() << " " << user.get_last_name() << endl;
 	return os;
+}
+
+User& User::operator += (vector<User>& user_vec) {
+      user_vec.push_back(*this); 
+      return *this;
 }

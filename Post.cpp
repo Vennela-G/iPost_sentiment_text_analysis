@@ -64,7 +64,29 @@ SensitivityPrefEnum Post::get_sensitivity_pref() {
 	return sensitivity_pref;
 }
 
+string Post::gen_random_string() {
+				
+	string temp_string;
+	static const char alpha_num_arr[] =
+		"0123456789"
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz";
+
+	for (unsigned int i = 0; i < 6; ++i) {
+		srand(time(0));
+		temp_string += alpha_num_arr[(rand() % 6) + 1];
+	}
+	
+	return temp_string;
+
+}
+
 ostream& operator<<(ostream& os, Post& post) {
 	os << "[ID: " << post.get_post_id() << "]  @" << post.get_username() << " " << post.get_post_date_time() << endl << post.get_message() << endl;
 	return os;
+}
+
+Post& Post::operator += (vector<Post>& post_vec) {
+     post_vec.push_back(*this); 
+     return *this;
 }

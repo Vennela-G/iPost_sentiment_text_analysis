@@ -39,9 +39,7 @@ public:
 	string get_password();
 
 	virtual void view_all_posts(vector<Post>& posts) = 0;
-
-	static int printing_choice_options(string question, string option_1, string option_2);
-	static int printing_choice_options(string question, string option_1, string option_2, string option_3, string option_4);
+	virtual void delete_post(vector<Post>& posts) = 0;
 
 };
 

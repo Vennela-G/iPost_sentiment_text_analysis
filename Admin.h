@@ -14,8 +14,6 @@ class Admin : public Person {
 
 public:
 
-	Admin();
-
 	int login();
 
 	void view_all_users(vector<User>& users);

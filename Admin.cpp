@@ -2,10 +2,9 @@
 #include "Admin.h"
 #include "User.h"
 #include "FileIO.h"
+#include "UserInterface.h"
 
 using namespace std;
-
-Admin::Admin() {};
 
 int Admin::login() {
 
@@ -29,7 +28,7 @@ int Admin::login() {
 	}
 	
 	cout << "The username or password you have entered is incorrect." << endl << endl;
-	choice = printing_choice_options("What would you like to do?", "Try logging in again", "Exit");
+	choice = UserInterface::printing_choice_options("What would you like to do?", "Try logging in again", "Exit");
 
 	if (choice == 1) {
 		login();

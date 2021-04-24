@@ -34,8 +34,8 @@ public:
     void set_last_login_date_time(char* arg_last_login_date_time);
     char* get_last_login_date_time();
 
-    int login(vector<User> user_data);
-    static void user_registration(vector<User>& user_data, User& user);
+    int login(vector<User>& user_data);
+    friend void user_registration(vector<User>& user_data, User& user);
 
     void view_all_posts(vector<Post>& posts);
     void view_user_posts(vector<Post>& posts);
@@ -43,6 +43,7 @@ public:
     void delete_post(vector<Post>& posts);
 
     friend ostream& operator<<(ostream& os, User& user);
+    User& operator += (vector<User>& user_vec);
 
 };
 
