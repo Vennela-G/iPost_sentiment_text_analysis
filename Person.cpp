@@ -1,3 +1,11 @@
+/*
+ * Author: Vennela Gudla Venkata Siva
+ * Purpose: This is the impementation file for the Person class. The purpose of this
+ *          class is to provide Person base class constructor and getter/setters. The Person
+ *          class is an abstract class because it has 2 pure virtual functions which the derived
+ *          classes must override.
+ */
+
 #include <iostream>
 
 #include "Person.h"
@@ -6,6 +14,7 @@
 
 using namespace std;
 
+// Default constructor for the Person class 
 Person::Person() {
 	first_name = "";
 	last_name = "";
@@ -14,6 +23,7 @@ Person::Person() {
 	password = "";
 }
 
+// Constructor for the Person class
 Person::Person(string arg_f_name, string arg_l_name, string arg_email, string arg_username, string arg_password) {
 	first_name = arg_f_name;
 	last_name = arg_l_name;
@@ -21,6 +31,8 @@ Person::Person(string arg_f_name, string arg_l_name, string arg_email, string ar
 	username = arg_username;
 	password = arg_password;
 }
+
+// Setters & Getter for each attribute in the Person Object
 
 void Person::set_first_name(string arg_f_name) {
 	first_name = arg_f_name;

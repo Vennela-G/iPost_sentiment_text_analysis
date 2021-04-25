@@ -1,5 +1,13 @@
+/*
+ * Author: Vennela Gudla Venkata Siva
+ * Purpose: This is the impementation file for the EnumHelper class. The purpose of class
+ * 	        is to convert enums like SensitivityPrefEnum and AccountStatusEnum to string
+ * 	        and vice-versa
+ */
+
 #include "EnumHelper.h"
 
+// A static function that converts an input string to a SensitivityPrefEnum
 SensitivityPrefEnum EnumHelper::string_to_enum_sensitivity_pref(string enum_str) {
 
 	if (enum_str == "MILD") {
@@ -17,6 +25,7 @@ SensitivityPrefEnum EnumHelper::string_to_enum_sensitivity_pref(string enum_str)
 
 }
 
+// A static function that converts an input string to a AccountStatusEnum
 AccountStatusEnum EnumHelper::string_to_acct_status(string enum_str) {
 
 	if (enum_str == "ACTIVE") {
@@ -34,6 +43,7 @@ AccountStatusEnum EnumHelper::string_to_acct_status(string enum_str) {
 
 }
 
+// A static function that converts SensitivityPrefEnum to a string output
 string EnumHelper::enum_sensitivity_pref_to_string(SensitivityPrefEnum s_pref) {
 
 	switch (s_pref)
@@ -49,6 +59,7 @@ string EnumHelper::enum_sensitivity_pref_to_string(SensitivityPrefEnum s_pref) {
 	}
 }
 
+// A static function that converts AccountStatusEnum to a string output
 string EnumHelper::enum_acct_status_to_string(AccountStatusEnum acct_status) {
 
 	switch (acct_status)
